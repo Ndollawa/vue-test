@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
+// import TopNav from './components/TopNav'
 </script>
 
 <template>
@@ -16,7 +17,7 @@ import { RouterLink, RouterView } from 'vue-router'
  
 </template>
 
-<style lang="less" scoped>
+<style lang="less">
 .app__dashboard {
   background-color: var(--color-background);
   width: 100%;
