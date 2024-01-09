@@ -1,0 +1,153 @@
+/* @use "../../../../styles"; */
+
+.darkTheme {
+  --color-background: hsl(220, 11%, 11%);
+  --color-white: hsl(202, 11%, 14%);
+  --color-info-light: hsl(220, 27%, 89%);
+  --color-dark: hsl(233, 80%, 96%);
+  --color-dark-variant: hsl(202, 29%, 72%);
+  --color-light: hsla(0, 0%, 0%, 0.4);
+  --box-shadow: 0 2rem 3rem var(--color-light);
+
+  color: var(--color-dark);
+}
+:root {
+  --primary-color: hsl(270, 100%, 50%);
+  --transparent-primary-color: hsla(270, 100%, 50%, 0.145);
+  --color-background-2: hsl(201, 22%, 31%);
+
+  --color-background: hsl(216, 26%, 96%);
+
+  --color-primary: hsl(234, 76%, 69%);
+  --color-info-dark: hsl(213, 16%, 56%);
+  --color-info-light: hsl(220, 27%, 89%);
+  --color-white: hsl(0, 0%, 100%);
+  --color-dark: hsl(231, 15%, 25%);
+  --color-light: hsla(234, 38%, 65%, 0.18);
+  --color-primary--variant: hsl(233, 78%, 30%);
+  --color-dark--variant: hsl(212, 12%, 46%);
+  --transparent-secondary-color: hsla(212, 12%, 46%, 0.141);
+
+  --card-border-radius: 2rem;
+  --border-radius-1: 0.4rem;
+  --border-radius-2: 0.8rem;
+  --border-radius-3: 1.2rem;
+
+  --card-padding: 1.5rem;
+  --padding-1: 0.8rem;
+
+  --box-shadow: 0 2rem 3rem var(--color-light);
+
+  .dark:extends(.darkTheme) {
+  }
+}
+
+.color-dark {
+  background-color: var(--color-dark);
+}
+
+.color-dark-variant {
+  background-color: var(--color-dark-variant);
+}
+
+.color-light {
+  background-color: var(--color-light);
+}
+
+.color-primary-variant {
+  background-color: var(--color-primary-variant);
+}
+
+.color-primary {
+  background-color: var(--color-primary);
+}
+
+.color-info-dark {
+  background-color: var(--color-info-dark);
+}
+
+.color-info-light {
+  background-color: var(--color-info-light);
+}
+
+.color-white {
+  background-color: var(--color-white);
+}
+
+.color-primary {
+  background-color: var(--color-primary);
+}
+
+.color-background {
+  background-color: var(--color-background);
+}
+
+.color-background-2 {
+  background-color: var(--color-background-2);
+}
+
+.transparent-secondary-color {
+  background-color: var(--transparent-secondary-color);
+}
+
+.transparent-primary-color {
+  background-color: var(--transparent-primary-color);
+}
+
+.text-dark {
+  color: var(--color-dark);
+}
+
+.text-dark-variant {
+  color: var(--color-dark-variant);
+}
+
+.text-light {
+  color: var(--color-light);
+}
+
+.text-primary-variant {
+  color: var(--color-primary-variant);
+}
+
+.text-primary {
+  color: var(--color-primary);
+}
+
+.text-info-dark {
+  color: var(--color-info-dark);
+}
+
+.text-info-light {
+  color: var(--color-info-light);
+}
+
+.text-white {
+  color: var(--color-white);
+}
+
+.text-primary {
+  color: var(--color-primary);
+}
+
+.text-background {
+  color: var(--color-background);
+}
+
+.box-shadow {
+  box-shadow: var(--box-shadow);
+}
+
+main {
+  width: 100%;
+}
+.profile__photo {
+  width: 2.8rem;
+  height: 2.8rem;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.text__muted {
+  color: var(--color-info-dark);
+}

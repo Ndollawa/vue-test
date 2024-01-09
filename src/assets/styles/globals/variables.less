@@ -1,0 +1,665 @@
+@use "sass:math";
+
+$baseFontSize: 1rem;
+$basePadding: 0.25rem;
+$baseMargin: 0.25rem;
+$baseBorder: 0.25rem;
+$baseGap: 0.25rem;
+$baseGutter: 0.25rem;
+$baseOpacity: 1%;
+$fontWeights: (
+  "normal": 400,
+  "semi-bold": 500,
+  "bold": 700,
+  "bold-xl": 800,
+  "bold-sm": 900,
+  "bold-md": "bold",
+  "bold-lg": "bolder",
+);
+
+$fontSizes: (
+  "normal": $baseFontSize,
+  "xxs": $baseFontSize * 0.25,
+  "xs": $baseFontSize * 0.5,
+  "sm": $baseFontSize * 0.75,
+  "md": $baseFontSize * 1.25,
+  "lg": $baseFontSize * 1.5,
+  "xl": $baseFontSize * 1.75,
+  "2xl": $baseFontSize * 2,
+  "3xl": $baseFontSize * 2.25,
+  "4xl": $baseFontSize * 2.5,
+  "5xl": $baseFontSize * 2.75,
+  "6xl": $baseFontSize * 3,
+  "7xl": $baseFontSize * 3.25,
+  "8xl": $baseFontSize * 3.5,
+  "9xl": $baseFontSize * 3.75,
+  "10xl": $baseFontSize * 4,
+);
+
+$rangeBasedUtilityClasses: (
+  "padding": (
+    "prefix": "p",
+    "baseValue": $basePadding,
+    "values": (
+      "start": 0,
+      "end": 100,
+    ),
+  ),
+  "padding-left": (
+    "prefix": "pl",
+    "baseValue": $basePadding,
+    "values": (
+      "start": 0,
+      "end": 100,
+    ),
+  ),
+  "padding-top": (
+    "prefix": "pt",
+    "baseValue": $basePadding,
+    "values": (
+      "start": 0,
+      "end": 100,
+    ),
+  ),
+  "padding-right": (
+    "prefix": "pr",
+    "baseValue": $basePadding,
+    "values": (
+      "start": 0,
+      "end": 100,
+    ),
+  ),
+  "padding-bottom": (
+    "prefix": "pb",
+    "baseValue": $basePadding,
+    "values": (
+      "start": 0,
+      "end": 100,
+    ),
+  ),
+  "padding-inline": (
+    "prefix": "px",
+    "baseValue": $basePadding,
+    "values": (
+      "start": 0,
+      "end": 100,
+    ),
+  ),
+  "padding-block": (
+    "prefix": "py",
+    "baseValue": $basePadding,
+    "values": (
+      "start": 0,
+      "end": 100,
+    ),
+  ),
+  //MARGIN
+  "margin":
+    (
+      "prefix": "m",
+      "baseValue": $baseMargin,
+      "values": (
+        "start": 0,
+        "end": 100,
+      ),
+    ),
+  "margin-left": (
+    "prefix": "ml",
+    "baseValue": $baseMargin,
+    "values": (
+      "start": 0,
+      "end": 100,
+    ),
+  ),
+  "margin-top": (
+    "prefix": "mt",
+    "baseValue": $baseMargin,
+    "values": (
+      "start": 0,
+      "end": 100,
+    ),
+  ),
+  "margin-right": (
+    "prefix": "mr",
+    "baseValue": $baseMargin,
+    "values": (
+      "start": 0,
+      "end": 100,
+    ),
+  ),
+  "margin-bottom": (
+    "prefix": "mb",
+    "baseValue": $baseMargin,
+    "values": (
+      "start": 0,
+      "end": 100,
+    ),
+  ),
+  "margin-inline": (
+    "prefix": "mx",
+    "baseValue": $baseMargin,
+    "values": (
+      "start": 0,
+      "end": 100,
+    ),
+  ),
+  "margin-block": (
+    "prefix": "my",
+    "baseValue": $baseMargin,
+    "values": (
+      "start": 0,
+      "end": 100,
+    ),
+  ),
+
+  //BORDER
+  "border":
+    (
+      "prefix": "border",
+      "values": (
+        "start": 0,
+        "end": 100,
+      ),
+    ),
+  "border-left": (
+    "prefix": "border-l",
+    "values": (
+      "start": 0,
+      "end": 100,
+    ),
+  ),
+  "border-top": (
+    "prefix": "border-t",
+    "values": (
+      "start": 0,
+      "end": 30,
+    ),
+  ),
+  "border-right": (
+    "prefix": "border-r",
+    "values": (
+      "start": 0,
+      "end": 30,
+    ),
+  ),
+  "border-bottom": (
+    "prefix": "border-b",
+    "values": (
+      "start": 0,
+      "end": 30,
+    ),
+  ),
+  "border-inline": (
+    "prefix": "border-x",
+    "values": (
+      "start": 0,
+      "end": 100,
+    ),
+  ),
+  "border-block": (
+    "prefix": "border-y",
+    "values": (
+      "start": 0,
+      "end": 30,
+    ),
+  ),
+  //BORDER
+  "border-radius":
+    (
+      "prefix": "r",
+      "baseValue": $baseBorder,
+      "values": (
+        "start": 0,
+        "end": 100,
+      ),
+    ),
+  "border-top-left-radius": (
+    "prefix": "r-tl",
+    "baseValue": $baseBorder,
+    "values": (
+      "start": 0,
+      "end": 100,
+    ),
+  ),
+  "border-top-right-radius": (
+    "prefix": "r-tr",
+    "baseValue": $baseBorder,
+    "values": (
+      "start": 0,
+      "end": 100,
+    ),
+  ),
+  "border-bottom-right-radius": (
+    "prefix": "r-br",
+    "baseValue": $baseBorder,
+    "values": (
+      "start": 0,
+      "end": 100,
+    ),
+  ),
+  "border-bottom-left-radius": (
+    "prefix": "r-bl",
+    "baseValue": $baseBorder,
+    "values": (
+      "start": 0,
+      "end": 100,
+    ),
+  ),
+  "border-start-end-radius": (
+    "prefix": "border-se",
+    "baseValue": $baseBorder,
+    "values": (
+      "start": 0,
+      "end": 100,
+    ),
+  ),
+  "border-end-end-radius": (
+    "prefix": "r-ee",
+    "baseValue": $baseBorder,
+    "values": (
+      "start": 0,
+      "end": 100,
+    ),
+  ),
+  "border-end-start-radius": (
+    "prefix": "r-es",
+    "baseValue": $baseBorder,
+    "values": (
+      "start": 0,
+      "end": 100,
+    ),
+  ),
+  "border-start-start-radius": (
+    "prefix": "r-ss",
+    "baseValue": $baseBorder,
+    "values": (
+      "start": 0,
+      "end": 100,
+    ),
+  ),
+  // GAP
+  "gap":
+    (
+      "prefix": "gap",
+      "baseValue": $baseGap,
+      "values": (
+        "start": 0,
+        "end": 100,
+      ),
+    ),
+  "row-gap": (
+    "prefix": "r-gap",
+    "baseValue": $baseGap,
+    "values": (
+      "start": 0,
+      "end": 100,
+    ),
+  ),
+  "column-gap": (
+    "prefix": "c-gap",
+    "baseValue": $baseGap,
+    "values": (
+      "start": 0,
+      "end": 100,
+    ),
+  ),
+
+  "font-size": (
+    "prefix": "fs",
+    "baseValue": 0.025rem,
+    "values": (
+      "start": 1,
+      "end": 120,
+    ),
+  ),
+  // OPACITY
+  "opacity":
+    (
+      "prefix": "o",
+      "baseValue": $baseOpacity,
+      "values": (
+        "start": 0,
+        "end": 100,
+      ),
+    ),
+  // flexbox
+  "flex-shrink":
+    (
+      "prefix": "shrink",
+      "values": (
+        "start": 0,
+        "end": 12,
+      ),
+    ),
+  "flex-grow": (
+    "prefix": "grow",
+    "values": (
+      "start": 0,
+      "end": 12,
+    ),
+  ),
+  "order": (
+    "prefix": "order",
+    "values": (
+      "start": 0,
+      "end": 12,
+    ),
+  ),
+  "width": (
+    "prefix": "w",
+    "baseValue": 1%,
+    "values": (
+      "start": 1,
+      "end": 100,
+    ),
+  ),
+  "height": (
+    "prefix": "h",
+    "baseValue": 1%,
+    "values": (
+      "start": 0,
+      "end": 100,
+    ),
+  ),
+);
+
+$valueBasedUtilityClasses: (
+  "display": (
+    "prefix": "d",
+    "values": (
+      "inline": inline,
+      "inline-flex": inline-flex,
+      "inline-block": inline-block,
+      "flex": flex,
+      "block": block,
+      "table": table,
+      "grid": grid,
+      "table-row": table-row,
+      "table-cell": table-cell,
+      "none": none,
+    ),
+  ),
+  "visibilty": (
+    "prefix": "v",
+    "values": (
+      "hidden": hidden,
+      "visible": visible,
+      "collapse": collapse,
+    ),
+  ),
+  "flex-direction": (
+    "prefix": "flex",
+    "values": (
+      "row": row,
+      "row-reverse": row-reverse,
+      "column-reverse": column-reverse,
+      "column": column,
+    ),
+  ),
+  "flex-wrap": (
+    "prefix": "flex",
+    "values": (
+      "wrap": wrap,
+      "no-wrap": no-wrap,
+      "wrap-reverse": wrap-reverse,
+    ),
+  ),
+  "justify-content": (
+    "prefix": "jc",
+    "values": (
+      "center": center,
+      "flex-start": flex-start,
+      "flex-end": flex-end,
+      "start": start,
+      "end": end,
+      "left": left,
+      "right": right,
+      "evenly": space-evenly,
+      "space-around": space-around,
+      "space-between": space-between,
+    ),
+  ),
+  "justify-items": (
+    "prefix": "ji",
+    "values": (
+      "baseline": baseline,
+      "center": center,
+      "flex-start": flex-start,
+      "flex-end": flex-end,
+      "start": start,
+      "end": end,
+      "left": left,
+      "right": right,
+      "evenly": space-evenly,
+      "space-around": space-around,
+      "space-between": space-between,
+    ),
+  ),
+  "justify-self": (
+    "prefix": "js",
+    "values": (
+      "baseline": baseline,
+      "center": center,
+      "flex-start": flex-start,
+      "flex-end": flex-end,
+      "start": start,
+      "end": end,
+      "left": left,
+      "right": right,
+      "evenly": space-evenly,
+      "space-around": space-around,
+      "space-between": space-between,
+    ),
+  ),
+  "align-content": (
+    "prefix": "ac",
+    "values": (
+      "center": center,
+      "flex-end": flex-end,
+      "flex-start": flex-start,
+      "end": end,
+      "start": start,
+      "baseline": baseline,
+      "stretch": space-stretch,
+      "space-around": space-around,
+      "space-between": space-between,
+    ),
+  ),
+  "align-items": (
+    "prefix": "ai",
+    "values": (
+      "center": center,
+      "left": left,
+      "right": right,
+      "flex-start": flex-start,
+      "flex-end": flex-end,
+      "start": start,
+      "end": end,
+      "baseline": baseline,
+      "stretch": stretch,
+    ),
+  ),
+  "align-self": (
+    "prefix": "as",
+    "values": (
+      "center": center,
+      "left": left,
+      "right": right,
+      "flex-start": flex-start,
+      "flex-end": flex-end,
+      "start": start,
+      "end": end,
+      "baseline": baseline,
+      "stretch": stretch,
+    ),
+  ),
+  "place-items": (
+    "prefix": "pi",
+    "values": (
+      "center": center,
+      "left": left,
+      "right": right,
+      "flex-start": flex-start,
+      "flex-end": flex-end,
+      "start": start,
+      "end": end,
+      "baseline": baseline,
+      "stretch": stretch,
+    ),
+  ),
+  "place-content": (
+    "prefix": "pc",
+    "values": (
+      "center": center,
+      "left": left,
+      "right": right,
+      "flex-start": flex-start,
+      "flex-end": flex-end,
+      "start": start,
+      "end": end,
+      "baseline": baseline,
+      "stretch": stretch,
+    ),
+  ),
+  "place-self": (
+    "prefix": "ps",
+    "values": (
+      "center": center,
+      "left": left,
+      "right": right,
+      "flex-start": flex-start,
+      "flex-end": flex-end,
+      "start": start,
+      "end": end,
+      "baseline": baseline,
+      "stretch": stretch,
+    ),
+  ),
+  "border-style": (
+    "prefix": "border",
+    "values": (
+      "dashed": dashed,
+      "solid": solid,
+      "ridge": ridge,
+      "double": double,
+      "dotted": dotted,
+      "groove": groove,
+      "outset": outset,
+      "none": none,
+      "hidden": hidden,
+    ),
+  ),
+  "text-align": (
+    "prefix": "text",
+    "values": (
+      "center": center,
+      "left": left,
+      "justify": justify,
+      "right": right,
+    ),
+  ),
+  "vertical-align": (
+    "prefix": "align",
+    "values": (
+      "middle": middle,
+      "top": top,
+      "bottom": bottom,
+      "text-bottom": text-bottom,
+      "text-top": text-top,
+      "sub": sub,
+      "super": super,
+      "baseline": baseline,
+      "auto": auto,
+    ),
+  ),
+  "position": (
+    "prefix": "pos",
+    "values": (
+      "absolute": absolute,
+      "fixed": fixed,
+      "sticky": sticky,
+      "relative": relative,
+    ),
+  ),
+  "object-fit": (
+    "prefix": "object",
+    "values": (
+      "none": none,
+      "contain": contain,
+      "cover": cover,
+      "scale-down": scale-down,
+      "fill": fill,
+    ),
+  ),
+  "object-position": (
+    "prefix": "object-pos",
+    "values": (
+      "center": center,
+      "top": top,
+      "bottom": bottom,
+      "left": left,
+      "right": right,
+    ),
+  ),
+  "box-sizing": (
+    "prefix": "box-sizing",
+    "values": (
+      "content-box": content-box,
+      "border-box": border-box,
+    ),
+  ),
+  "cursor": (
+    "prefix": "cursor",
+    "values": (
+      "pointer": pointer,
+      "none": none,
+      "progress": progress,
+      "not-allowed": not-allowed,
+      "grab": grab,
+      "grabbing": grabbing,
+      "zoom-in": zoom-in,
+      "zoom-out": zoom-out,
+      "col-resize": col-resize,
+      "row-resize": row-resize,
+      "wait": wait,
+      "copy": copy,
+      "context-menu": context-menu,
+    ),
+  ),
+  "font-weight": (
+    "prefix": "fw",
+    "values": (
+      "xxs": 100,
+      "xs": 200,
+      "sm": 300,
+      "normal": 400,
+      "semi-bold": 500,
+      "bold": 700,
+      "bold-xl": 800,
+      "bold-xxl": 900,
+      "bold-md": "bold",
+      "bold-lg": "bolder",
+    ),
+  ),
+  "font-size": (
+    "prefix": "fs",
+    "values": (
+      "normal": $baseFontSize,
+      "xxs": $baseFontSize * 0.25,
+      "xs": $baseFontSize * 0.5,
+      "sm": $baseFontSize * 0.75,
+      "md": $baseFontSize * 1.25,
+      "lg": $baseFontSize * 1.5,
+      "xl": $baseFontSize * 1.75,
+      "2xl": $baseFontSize * 2,
+      "3xl": $baseFontSize * 2.25,
+      "4xl": $baseFontSize * 2.5,
+      "5xl": $baseFontSize * 2.75,
+      "6xl": $baseFontSize * 3,
+      "7xl": $baseFontSize * 3.25,
+      "8xl": $baseFontSize * 3.5,
+      "9xl": $baseFontSize * 3.75,
+      "10xl": $baseFontSize * 4,
+    ),
+  ),
+);

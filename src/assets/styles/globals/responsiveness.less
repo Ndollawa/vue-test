@@ -1,0 +1,89 @@
+@use "mixins";
+@use "breakpoints";
+@use "../utils";
+@use "colors";
+@use "variables";
+
+$gridCount: 12;
+// $label:'sm';
+.container {
+  width: 100%;
+  max-width: utils.pxToRem(1080);
+  margin: 0 auto;
+  padding: 0 utils.pxToRem(20);
+}
+.container-fluid {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 utils.pxToRem(20);
+}
+
+.row {
+  display: flex;
+  flex-flow: row wrap;
+}
+@include mixins.breakPointsDown(map-get(breakpoints.$screenBreakPoints, "lg")) {
+  .container {
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 utils.pxToRem(15);
+  }
+  .container-fluid {
+    padding: 0 utils.pxToRem(15);
+  }
+}
+@include mixins.breakPointsDown(map-get(breakpoints.$screenBreakPoints, "md")) {
+  .container {
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 utils.pxToRem(10);
+  }
+  .container-fluid {
+    padding: 0 utils.pxToRem(10);
+  }
+}
+
+@each $tempType in ("columns", "rows") {
+  @for $count from 1 through $gridCount {
+    @include mixins.gridLayout($tempType, $count);
+  }
+}
+@for $count from 1 through $gridCount {
+  @include mixins.flexLayout($count);
+}
+
+@include mixins.flexLayoutGutter(40);
+@include mixins.generateGridAndWidthClasses();
+@include mixins.generateUtilityClasses();
+@include mixins.generateColorClasses(colors.$colors);
+
+@media (prefers-color-scheme: dark) {
+  @include mixins.generateColorClasses(colors.$colors, "default", "dark");
+}
+@each $key, $val in breakpoints.$screenBreakPoints {
+  @include mixins.breakPointsUp($val) {
+    @each $tempType in ("columns", "rows") {
+      @for $count from 1 through $gridCount {
+        @include mixins.gridLayout($tempType, $count, $key);
+      }
+    }
+
+    @for $count from 1 through $gridCount {
+      @include mixins.flexLayout($count, $key);
+    }
+
+    @include mixins.flexLayoutGutter(40, $key);
+    @include mixins.generateGridAndWidthClasses($key);
+    @include mixins.generateUtilityClasses($key);
+
+    @include mixins.generateColorClasses(colors.$colors, $key);
+
+    @media (prefers-color-scheme: dark) {
+      @include mixins.generateColorClasses(colors.$colors, $key, "dark");
+    }
+  }
+}
+
+.center {
+  @include mixins.flexCenter(column);
+}

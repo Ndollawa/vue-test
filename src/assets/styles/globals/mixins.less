@@ -1,0 +1,216 @@
+@import (reference) "./variables" as var;
+
+.flexCenter(@dir: row) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: @dir;
+}
+
+.gridCenter() {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+}
+
+.breakPointsUp(@breakPoint) {
+  .-default() {
+    &:extend(.breakPointsUp());
+  }
+
+  & when (@breakPoint = default) {
+    &:extend(.breakPointsUp.-default all);
+  }
+
+  & when (@breakPoint = default) {
+    @content;
+  }
+
+  & when not (@breakPoint = default) {
+    @media screen and (min-width: @breakPoint) {
+      @content;
+    }
+  }
+}
+
+.breakPointsDown(@breakPoint) {
+  .-default() {
+    &:extend(.breakPointsDown());
+  }
+
+  & when (@breakPoint = default) {
+    &:extend(.breakPointsDown.-default all);
+  }
+
+  & when (@breakPoint = default) {
+    @content;
+  }
+
+  & when not (@breakPoint = default) {
+    @media screen and (max-width: @breakPoint) {
+      @content;
+    }
+  }
+}
+
+.flexLayout(@count, @label: default) {
+  .-default() {
+    &:extend(.flexLayout());
+  }
+
+  & when (@label != default) {
+    .@{label}\:col-@{count} {
+      flex-basis: calc((100% / 12) * @count);
+    }
+
+    .@{label}\:col-offset-@{count} {
+      margin-left: calc((100% / 12) * @count);
+    }
+  } & when (@label = default) {
+    .col-@{count} {
+      flex-basis: calc((100% / 12) * @count);
+    }
+
+    .col-offset-@{count} {
+      margin-left: calc((100% / 12) * @count);
+    }
+  }
+}
+
+.textEllipsis() {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.flexLayoutGutter(@count, @breakpoint: "default", @scheme: "light") {
+  .loopGutter(@label) when (@count > 0) {
+    .-default() {
+      &:extend(.loopGutter(@label));
+    }
+    
+    & when (@label = gutter) {
+      .@{label}-@{count} {
+        padding: @count * var.@{baseGutter} !important;
+        margin: -@count * var.@{baseGutter} !important;
+      }
+    }
+    
+    & when (@label = gutter-x) {
+      .@{label}-@{count} {
+        padding-inline: @count * var.@{baseGutter} !important;
+        margin-inline: -@count * var.@{baseGutter} !important;
+      }
+    }
+    
+    & when (@label = gutter-y) {
+      .@{label}-@{count} {
+        padding-block: @count * var.@{baseGutter} !important;
+        margin-block: -@count * var.@{baseGutter} !important;
+      }
+    }
+    
+    .loopGutter(@label - 1);
+  }
+
+  .loopGutter(gutter);
+}
+
+.gridLayout(@tempType, @count, @label: "default") {
+  .-default() {
+    &:extend(.gridLayout(@tempType, @count));
+  }
+
+  & when not (@label = default) {
+    .@{label}\:grid-@{tempType}-@{count} {
+      grid-template-@{tempType}: repeat(@count, 1fr);
+    }
+  } & when (@label = default) {
+    .grid-@{tempType}-@{count} {
+      grid-template-@{tempType}: repeat(@count, 1fr);
+    }
+  }
+}
+
+.modifiers(@map, @attribute, @prefix: "-", @separator: "-", @base: "base") {
+  .loopModifiers(@map, @attribute, @prefix, @separator, @base) when (length(@map) > 0) {
+    .-default() {
+      &:extend(.loopModifiers(@map, @attribute, @prefix, @separator, @base));
+    }
+    
+    .loopModifiers(@map, @attribute, @prefix, @separator, @base) when (length(@map) > 0) {
+      .loopModifiers(@map, @attribute, @prefix, @separator, @base);
+    }
+    
+    .loopModifiers(tail(@map), @attribute, @prefix, @separator, @base);
+  }
+
+  .loopModifiers(@map, @attribute, @prefix, @separator, @base);
+}
+
+.generateColorClasses(@colors, @breakpoint: "default", @scheme: "light") {
+  .bg-transparent {
+    background-color: transparent;
+  }
+  
+  .text-transparent {
+    color: transparent;
+  }
+  
+  .border-transparent {
+    border-color: transparent;
+  }
+  
+  .loopColors(@colors, @breakpoint, @scheme);
+  
+  .loopColors(@colors, @breakpoint, @scheme) when (length(@colors) > 0) {
+    .loopColors(@colors, @breakpoint, @scheme);
+  }
+  
+  .loopColors(tail(@colors), @breakpoint, @scheme);
+}
+
+.generateGridAndWidthClasses(@breakpoint: "default", @scheme: "light") {
+  .loopGridAndWidth(@breakpoint);
+  
+  .loopGridAndWidth(@breakpoint) when (@i > 0) {
+    .col-span-@{i} {
+      grid-column: @i;
+    }
+    
+    .row-span-@{i} {
+      grid-row: @i;
+    }
+    
+    .loopGridAndWidth(@breakpoint - 1);
+  }
+  
+  .loopGridAndWidth(12);
+}
+
+.generateUtilityClasses(@breakpoint: "default", @scheme: "light") {
+  .loopUtility(@rangeBasedUtilityClasses);
+  .loopUtility(@valueBasedUtilityClasses);
+  
+  .loopUtility(@map) when (length(@map) > 0) {
+    .loopUtility(@map);
+  }
+  
+  .loopUtility(tail(@map));
+}
+
+.MakeTheme(@name, @color) {
+  // Define colors in your theme
+  @primary: @color;
+  @secondary: lighten(adjust-hue(@color, 20), 10%);
+  // Add your classes with css colors added
+  .@{name} {
+    .element {
+      color: @primary;
+    }
+    
+    .other-element {
+      background: @secondary;
+    }
+  }
+}
