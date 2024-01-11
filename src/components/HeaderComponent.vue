@@ -1,3 +1,7 @@
+<script setup lang="ts">
+ const date = new Date().getUTCSeconds();
+</script>
+
 <template>
     <div className="page__header">
       <div className="date mb-5">
@@ -6,10 +10,6 @@
       <h3>{title}</h3>
     </div>
 </template>
-
-<script setup lang="ts">
- const date = new Date().getUTCSeconds();
-</script>
 
 <style scoped>
 

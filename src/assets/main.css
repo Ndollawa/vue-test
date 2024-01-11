@@ -1,4 +1,4 @@
-/* @use "../../../../styles"; */
+@import "./base.css";
 
 .darkTheme {
   --color-background: hsl(220, 11%, 11%);

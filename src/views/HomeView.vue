@@ -1,34 +1,5 @@
-<!-- App.vue -->
-<template>
-  <div className="page">
-      <div className="page__content">
-        <h2>Recent Projects</h2>
-         <table className="table__bordered table__stripped table__hover table__scrollable">
-          <thead>
-            <th>
-              <input type="checkbox" />
-            </th>
-            <th>S/N</th>
-            <th>Image</th>
-            <th>Title</th>
-            <th>Date Published</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-  <!--<div id="app">
-    <button @click="startRecording">Start Recording</button>
-    <RecordingModal v-if="showModal" @startRecording="handleStartRecording" />
-  </div>-->
-</template>
-
 <script lang="ts" setup>
-import RecordingModal from "../components/Modal.vue";
+import {ModalComponent as RecordingModal} from "../components";
 
 
     const showModal = false;
@@ -58,8 +29,65 @@ import RecordingModal from "../components/Modal.vue";
 
 </script>
 
-<style>
+<template>
+  <div className="page">
+      <div className="page__content">
+        <h2>Recent Projects</h2>
+         <table className="table__bordered table__stripped table__hover table__scrollable">
+          <thead>
+            <th>
+             Recordings
+            </th>
+            <th>Title</th>
+            <th>Views</th>
+            <th>Size</th>
+            <th>Last Modified</th>
+            <th></th>
+          </thead>
+          <tbody>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
 
+  <!--<div id="app">
+    <button @click="startRecording">Start Recording</button>
+    <RecordingModal v-if="showModal" @startRecording="handleStartRecording" />
+  </div>-->
+</template>
+
+
+
+<style lang="less" scoped>
+     .page {
+      padding:1.5rem;
+
+        &__header {
+          h3 {
+            size: 2rem;
+          }
+
+          .date {
+            display: inline-block;
+            background-color: var(--color-light);
+            border-radius: var(--border-radius-1);
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+
+            input[type="date"] {
+              background: transparent;
+              color: var(--color-dark);
+              height: 25px;
+            }
+          }
+        }
+      }
 table,.table{
 padding: 2rem;
 table-layout: auto;
