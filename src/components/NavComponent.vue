@@ -60,6 +60,54 @@ const showMenu = defineProps(["toggleMenu"]);
         }
      
     }
+    @media screen and (max-width:47.988rem){
+    &.show {
+                display: block;
+                position: absolute;
+                background-color: var(--color-background);
+                padding: 0;
+                width: 15rem;
+                top: 5rem;
+                right: 1rem;
+                border-radius: 1.2rem;
+                align-items: center;
+                user-select: none;
+
+
+            }
+
+            &__links{
+                li {
+                    margin: 0;
+                    padding: 15px 25px;
+                    height: 3rem;
+                    color: var(--color-white);
+                    display: flex;
+                    align-items: center;
+                    text-transform: capitalize;
+
+                    &:hover {
+                        background-color: var(--color-background);
+
+                        a {
+
+                            color: var(--color-dark);
+                        }
+                    }
+
+                    &:first-child:hover {
+                        border-top-left-radius: 1.2rem;
+                        border-top-right-radius: 1.2rem;
+                    }
+
+                    //    &:last-child:hover{
+                    //     border-bottom-left-radius: 1.2rem;
+                    //     border-bottom-right-radius: 1.2rem;
+                    //    }
+                }
+            }
+        }
+    }}}
 }
 
 </style>

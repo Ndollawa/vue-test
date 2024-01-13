@@ -17,7 +17,7 @@ const handleToggleTheme = (state:boolean)=>{
   <div :class="{app__dashboard:true, dark:toggleDarkTheme}">
       <nav class="app__dashboard--nav">
         <div class="logo">Adilo</div>
-        <TopNavComponent :handleToggleMenu="handleToggleMenu" :handleToggleTheme="handleToggleTheme" :toggleDarkTheme="toggleDarkTheme.value" />
+        <TopNavComponent :handleToggleMenu="handleToggleMenu" :handleToggleTheme="handleToggleTheme" :toggleDarkTheme="toggleDarkTheme" />
       </nav>
       <SideBarComponent />
       <main class="main">

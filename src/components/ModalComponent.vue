@@ -13,11 +13,12 @@ const  selectedDevices = reactive({
    const requestPermission = async()=> {
       try {
         // Logic to request permission for selected devices
+        console.log(selectedDevices)
         await navigator.mediaDevices.getUserMedia(selectedDevices);
         // Save selected devices to local storage
         localStorage.setItem("selectedDevices", JSON.stringify(selectedDevices));
         // Emit an event to start recording in the parent component
-        $emit("startRecording", selectedDevices.value);
+        $emit("startRecording", selectedDevices);
       } catch (error) {
         console.error("Permission denied:", error);
         // Handle permission denied scenario (show an error message, etc.)
@@ -41,19 +42,19 @@ const  selectedDevices = reactive({
       <label for="screen">
         <input type="checkbox" id="screen" v-model="selectedDevices.screen" />
         Screen
-      </label><IoToggle v-if="selectedDevices.screen" color="seagreen"/> <IoToggleOutline v-if="!selectedDevices.screen"/>
+      </label><span @click="selectedDevices.screen = ! selectedDevices.screen"><IoToggle v-if="selectedDevices.screen" color="green"/> <IoToggleOutline v-if="!selectedDevices.screen"/></span>
     </div>
     <div class="media-option">
       <label for="camera">
         <input type="checkbox" id="camera" v-model="selectedDevices.camera" />
         Camera
-      </label> <IoToggle v-if="selectedDevices.camera" color="seagreen"/> <IoToggleOutline v-if="!selectedDevices.camera"/>
+      </label><span @click="selectedDevices.camera = ! selectedDevices.camera"> <IoToggle v-if="selectedDevices.camera" color="green"/> <IoToggleOutline v-if="!selectedDevices.camera"/></span>
     </div>
     <div class="media-option">
       <label for="mic">
         <input type="checkbox" id="mic" v-model="selectedDevices.microphone" />
         Microphone
-      </label> <IoToggle v-if="selectedDevices.microphone" color="seagreen"/> <IoToggleOutline v-if="!selectedDevices.microphone"/>
+      </label> <span @click="selectedDevices.microphone = ! selectedDevices.microphone"> <IoToggle v-if="selectedDevices.microphone" color="green"/> <IoToggleOutline v-if="!selectedDevices.microphone"/></span>
     </div>
       <button @click="requestPermission">Start Recording</button>
     </div>
@@ -62,6 +63,7 @@ const  selectedDevices = reactive({
 </template>
 
 <style lang="less" scoped>
+@import (reference) "../assets/styles/components/button";
 .overlay {
   position:absolute;
   width:100%;
@@ -104,16 +106,14 @@ const  selectedDevices = reactive({
         display:none;
       }
     }
-    svg{
+   span svg{
       font-size:1.5rem;
       cursor:pointer;
     }
   }
 }
 button {
-  margin-top: 10px;
-  padding: 10px 20px;
-  font-size: 16px;
+  .btn(#748849);
 }
 }
 

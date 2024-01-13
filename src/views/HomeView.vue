@@ -46,7 +46,7 @@ const breadcrum = ref(['Snapbyte','My Recordings']);
           <button type="button" class="new-request"><SlCamrecorder/> New Request</button>
       <button type="button" class="start-recording" @click="startRecording"><IoIosRecording/> Start Recording</button>
     </div>
-    <RecordingModal v-if="true" @startRecording="handleStartRecording" />
+    <RecordingModal v-if="showModal" @startRecording="handleStartRecording" />
         </div>
          <table className="table__bordered table__stripped table__hover table__scrollable">
           <thead>
