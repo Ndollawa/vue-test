@@ -1,11 +1,17 @@
 <script lang="ts" setup>
-import {ModalComponent as RecordingModal} from "../components";
+import { ref,reactive} from 'vue'
+import { GoKebabHorizontal } from "vue3-icons/go";
+import { IoIosRecording } from "vue3-icons/io";
+import { SlCamrecorder } from "vue3-icons/sl";
+import { TbArrowsSort } from "vue3-icons/tb";
+import { BsFilterLeft } from "vue3-icons/bs";
+import {ModalComponent as RecordingModal, BreadcrumComponent} from "../components";
 
-
-    const showModal = false;
- 
+const breadcrum = ref(['Snapbyte','My Recordings']);
+    const showModal = ref(false);
   const startRecording = ()=> {
-    showModal = true;
+    showModal.value = true;
+    alert("hhhhhh")
     }
     const handleStartRecording = (selectedDevices) => {
       // Save selected devices to local storage
@@ -15,7 +21,7 @@ import {ModalComponent as RecordingModal} from "../components";
       mockBackendResponse();
 
       // Close the modal
-      showModal = false;
+      showModal.value = false;
     }
   const mockBackendResponse = () => {
       // Mock backend response (you can replace this with actual backend logic)
@@ -23,16 +29,25 @@ import {ModalComponent as RecordingModal} from "../components";
         alert("Recording started successfully!");
       }, 1000);
     }
-  // components: {
-  //   RecordingModal,
-  // }
+ 
 
 </script>
 
 <template>
+  <BreadcrumComponent :breadcrum="breadcrum"/>
   <div className="page">
       <div className="page__content">
-        <h2>Recent Projects</h2>
+        <div class="heading">
+          <h2>My Recordings 45</h2>
+          <div class="action-tool">
+          <span class="sort"><TbArrowsSort /> By Date</span>
+
+          <span class="sort"><BsFilterLeft /> Add Filter</span>
+          <button type="button" class="new-request"><SlCamrecorder/> New Request</button>
+      <button type="button" class="start-recording" @click="startRecording"><IoIosRecording/> Start Recording</button>
+    </div>
+    <RecordingModal v-if="true" @startRecording="handleStartRecording" />
+        </div>
          <table className="table__bordered table__stripped table__hover table__scrollable">
           <thead>
             <th>
@@ -46,25 +61,29 @@ import {ModalComponent as RecordingModal} from "../components";
           </thead>
           <tbody>
             <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
+              <td>
+               <video src="" controls></video>
+              </td>
+              <td>
+                  <div>
+                    <h4> My Journey to Timbaktu</h4>
+                    <p>Here are some dummy texts to add to my projects.</p>
+                </div></td>
+              <td>56.2k</td>
+              <td>153Mb</td>
+              <td><GoKebabHorizontal/></td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
 
-  <!--<div id="app">
-    <button @click="startRecording">Start Recording</button>
-    <RecordingModal v-if="showModal" @startRecording="handleStartRecording" />
-  </div>-->
 </template>
 
 
 
 <style lang="less" scoped>
+@import (reference) "../assets/styles/components/button";
      .page {
       padding:1.5rem;
 
@@ -88,13 +107,46 @@ import {ModalComponent as RecordingModal} from "../components";
           }
         }
       }
+      .heading{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        margin-bottom:1rem;
+
+      .action-tool{
+        display:flex;
+        align-items:center;
+        color:var(--color-info-dark);
+        font-size:0.675rem;
+        justify-content:space-between;
+        gap:1.6rem;
+        
+         .sort{
+        border:1px solid #ccc;
+        border-radius:16px;
+        padding: 0.25rem * 1.5  0.25rem * 3;
+
+
+      }
+      .new-request{
+        .btn(red)
+      }
+      .start-recording{
+        .btn(#178af9)
+      }
+      }
+      }
+     
 table,.table{
 padding: 2rem;
 table-layout: auto;
 width:100%;
+font-size:0.725rem;
+font-weight:600;
 
 thead,tbody,th,tfoot,td,tr{
     padding: auto;
+    text-align:left;
 }
 
 td,th{
@@ -145,8 +197,8 @@ scroll-behavior: smooth;
 }
 }
 &.table__bordered{   
-border: 1px solid var(--color-dark);
-border-collapse: collapse;
+// border: 1px solid var(--color-dark);
+// border-collapse: collapse;
 
 thead,
     tbody,
@@ -154,9 +206,13 @@ thead,
     tfoot,
     td,
     tr {
-        border: 1px solid var(--color-dark);
-    }
 
+padding:.5rem 1rem;    }
+
+}
+td{
+  font-size:0.625rem;
+  font-weight:400;
 }
 }
 

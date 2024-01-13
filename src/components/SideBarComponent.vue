@@ -1,7 +1,7 @@
 
 <script setup lang="ts">
 import { ref, reactive } from 'vue';
-import {HiOutlineFilm ,HiOutlinShare} from 'vue3-icons/hi';
+import {HiOutlineFilm ,HiOutlineShare} from 'vue3-icons/hi';
 import {IoShareOutline} from 'vue3-icons/io';
 import MenuItemComponent from "./MenuItemComponent.vue";
 
@@ -13,9 +13,9 @@ const links = reactive([{
 },
 {
   id:2,
-  path:"/requested",
-  name:"Requested",
-  icon:HiOutlinShare,
+  path:"/request",
+  name:"Request",
+  icon:HiOutlineShare,
 }])
 
 

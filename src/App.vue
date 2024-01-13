@@ -4,15 +4,20 @@ import {ref} from "vue"
 import {TopNavComponent,SideBarComponent} from './components'
 const toggleMenu = ref(false)
 const toggleDarkTheme = ref(false)
-const handleToggleMenu = ()=> !toggleMenu.value;
-const handleToggleTheme = (state:boolean)=> toggleDarkTheme.value = state;
+const handleToggleMenu = ()=> {
+  toggleMenu.value = !toggleMenu.value;
+}
+const handleToggleTheme = (state:boolean)=>{
+  toggleDarkTheme.value = state;
+  // alert(toggleDarkTheme.value)
+} 
 </script>
 
 <template>
-  <div class="app__dashboard">
+  <div :class="{app__dashboard:true, dark:toggleDarkTheme}">
       <nav class="app__dashboard--nav">
-        <div class="logo">Logo</div>
-        <TopNavComponent :handleToggleMenu="handleToggleMenu" :handleToggleTheme="handleToggleTheme" :toggleMenu="toggleMenu" />
+        <div class="logo">Adilo</div>
+        <TopNavComponent :handleToggleMenu="handleToggleMenu" :handleToggleTheme="handleToggleTheme" :toggleDarkTheme="toggleDarkTheme.value" />
       </nav>
       <SideBarComponent />
       <main class="main">
@@ -79,6 +84,7 @@ const handleToggleTheme = (state:boolean)=> toggleDarkTheme.value = state;
     align-items:center;
     justify-content:space-between;
     z-index:10;
+    user-select:none;
     box-shadow: 0 2px 5px  rgba(0, 0, 0, 0.2);
     .logo{
       width:5rem;

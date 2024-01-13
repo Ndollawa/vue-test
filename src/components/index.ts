@@ -4,6 +4,7 @@ import SideBarComponent from "./SideBarComponent.vue"
 import TopNavComponent from "./TopNavComponent.vue"
 import HeaderComponent from "./HeaderComponent.vue"
 import NavComponent from "./NavComponent.vue"
+import BreadcrumComponent from "./BreadcrumComponent.vue"
 
 export {
     TopNavComponent,
@@ -11,5 +12,6 @@ export {
     ModalComponent,
     SideBarComponent,
     HeaderComponent,
-    NavComponent
+    NavComponent,
+    BreadcrumComponent,
 }

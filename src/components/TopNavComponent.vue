@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import {computed} from "vue";
+import {BsMoonStarsFill,BsSunFill  } from 'vue3-icons/bs'
 import NavComponent from "./NavComponent.vue"
 import userImage from "../assets/images/users/pic1.jpg";
 
-const {handleToggleTheme,handleToggleMenu} = defineProps(["handleToggleTheme","handleToggleMenu","toggleMenu"])
+const {handleToggleTheme,handleToggleMenu,toggleDarkTheme} = defineProps(["handleToggleTheme","handleToggleMenu","toggleDarkTheme"])
 
 </script>
 
@@ -28,25 +29,19 @@ const {handleToggleTheme,handleToggleMenu} = defineProps(["handleToggleTheme","h
           </div>
           <div class="theme__toggler">
             <span
-             :class="{active:toggleMenu}"
+             :class="[{active:!toggleDarkTheme}]"
               @click="handleToggleTheme(false)"
             >
               <BsSunFill />
             </span>
             <span
-           
+             :class="[{active:toggleDarkTheme }]"
               @click="handleToggleTheme(true)"
             >
-              <BsFillMoonStarsFill />
+              <BsMoonStarsFill />
             </span>
           </div>
           <div class="profile">
-            <div class="info">
-              <p>
-                Hey <strong>Ndubuisi</strong>
-              </p>
-              <small class="text__muted">Admin</small>
-            </div>
             <div class="profile__photo">
               <img
                 :src="userImage"
@@ -54,6 +49,12 @@ const {handleToggleTheme,handleToggleMenu} = defineProps(["handleToggleTheme","h
                 height={40}
                 alt="profile avatar"
               />
+            </div>
+            <div class="info">
+              <p>
+                Hey <strong>Ndubuisi</strong>
+              </p>
+              <small class="text__muted">Admin</small>
             </div>
           </div>
         </div>

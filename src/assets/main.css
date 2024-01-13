@@ -1,6 +1,6 @@
 @import "./base.css";
 
-.darkTheme {
+.dark {
   --color-background: hsl(220, 11%, 11%);
   --color-white: hsl(202, 11%, 14%);
   --color-info-light: hsl(220, 27%, 89%);
@@ -38,8 +38,7 @@
 
   --box-shadow: 0 2rem 3rem var(--color-light);
 
-  .dark:extends(.darkTheme) {
-  }
+ 
 }
 
 .color-dark {

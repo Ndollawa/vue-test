@@ -1,19 +1,21 @@
 <script setup lang="ts">
-import {ref} from "vue";
+import {reactive} from "vue";
+import { IoToggle,IoToggleOutline } from "vue3-icons/io5";
 
-const  selectedDevices = ref({
+
+const  selectedDevices = reactive({
         screen: false,
         camera: false,
         microphone: false,
       })
-  
+  console.log(selectedDevices)
  
    const requestPermission = async()=> {
       try {
         // Logic to request permission for selected devices
-        await navigator.mediaDevices.getUserMedia(selectedDevices.value);
+        await navigator.mediaDevices.getUserMedia(selectedDevices);
         // Save selected devices to local storage
-        localStorage.setItem("selectedDevices", JSON.stringify(selectedDevices.value));
+        localStorage.setItem("selectedDevices", JSON.stringify(selectedDevices));
         // Emit an event to start recording in the parent component
         $emit("startRecording", selectedDevices.value);
       } catch (error) {
@@ -29,18 +31,30 @@ const  selectedDevices = ref({
   <div class="modal">
     <div class="modal-content">
       <h2>Select Recording Options</h2>
-      <label>
-        <input type="checkbox" v-model="selectedDevices.value.screen" />
+      <div>
+        <select >
+          <option>Select Project</option>
+          <option>Hmmm</option>
+        </select>
+      </div>
+      <div class="media-option">
+      <label for="screen">
+        <input type="checkbox" id="screen" v-model="selectedDevices.screen" />
         Screen
-      </label>
-      <label>
-        <input type="checkbox" v-model="selectedDevices.value.camera" />
+      </label><IoToggle v-if="selectedDevices.screen" color="seagreen"/> <IoToggleOutline v-if="!selectedDevices.screen"/>
+    </div>
+    <div class="media-option">
+      <label for="camera">
+        <input type="checkbox" id="camera" v-model="selectedDevices.camera" />
         Camera
-      </label>
-      <label>
-        <input type="checkbox" v-model="selectedDevices.value.microphone" />
+      </label> <IoToggle v-if="selectedDevices.camera" color="seagreen"/> <IoToggleOutline v-if="!selectedDevices.camera"/>
+    </div>
+    <div class="media-option">
+      <label for="mic">
+        <input type="checkbox" id="mic" v-model="selectedDevices.microphone" />
         Microphone
-      </label>
+      </label> <IoToggle v-if="selectedDevices.microphone" color="seagreen"/> <IoToggleOutline v-if="!selectedDevices.microphone"/>
+    </div>
       <button @click="requestPermission">Start Recording</button>
     </div>
   </div>
@@ -74,6 +88,27 @@ const  selectedDevices = ref({
   padding: 20px;
   border-radius: 8px;
   text-align: center;
+
+  .media-option{
+    // margin-bottom:0.175rem;
+    padding:0.4rem .8rem;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    label{
+      font-size:.875rem;
+      cursor:pointer;
+
+      input[type="checkbox"]{
+        display:none;
+      }
+    }
+    svg{
+      font-size:1.5rem;
+      cursor:pointer;
+    }
+  }
 }
 button {
   margin-top: 10px;

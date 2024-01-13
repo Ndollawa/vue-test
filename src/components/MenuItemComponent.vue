@@ -29,8 +29,8 @@ const {link} = defineProps(["link"]);
           &:not(:last-child) {
             box-shadow: 0 0 4px var(--color-light);
           }
-          a:extend(.center){
-           justify-content:center;
+          a{
+            .center;
 
             div{
               display:flex;
@@ -65,7 +65,8 @@ const {link} = defineProps(["link"]);
                 display: inline;
               }
             }
-            span:extend(.center) {
+            span {
+              .center;
               font-size: 0.875rem;
               transition: 0.3s ease;
               line-height: 1.2;
