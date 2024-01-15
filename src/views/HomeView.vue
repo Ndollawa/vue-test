@@ -9,8 +9,7 @@ import { CgMediaLive } from "vue3-icons/cg";
 import {ModalComponent as RecordingModal, BreadcrumComponent} from "../components";
 
 const breadcrum = ref(['Snapbyte','My Recordings']);
-    const showModal = ref(false);
-    const isRecording = ref(false);
+    const showModal = ref(false), showFileModal = ref(false), isRecording = ref(false);
   const triggerRecording = ()=> {
     openModal()
     }
@@ -24,7 +23,7 @@ const closeModal = ()=>{
 const toggleIsRecording = (state:boolean)=>{
   isRecording.value = state
 }
-let mediaRecorder = null,
+var mediaRecorder = null,
   audio = null,
   mixedStream = null,
   stream = null,
@@ -110,7 +109,7 @@ const handleStop = (e) => {
 
   const url = URL.createObjectURL(blob);
   videoInfo.thumbnailDataUrl = generateThumbnail(url);
-
+showFileModal.value = true;
   saveToLocalStorage(blob);
   toggleIsRecording(false);
   showModal.value = true;
