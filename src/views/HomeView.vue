@@ -10,10 +10,9 @@ import {RecordingModalComponent,SaveRecordComponent, BreadcrumComponent} from ".
 import {saveToLocalStorage,getFromLocalStorage} from "../utils/helpers";
 
 const breadcrum = ref(['Snapbyte','My Recordings']);
-    const showModal = ref(false), showSaveModal = ref(false),isInitiateRecording = ref(false), isRecording = ref(false);
-  const triggerRecording = ()=> {
-    openModal()
-    }
+const showModal = ref(false), showSaveModal = ref(false),isInitiateRecording = ref(false), isRecording = ref(false);
+const triggerRecording = ()=>  openModal();
+const records = ref([]);
 const key =ref("allRecords");
 const openModal = ()=>showModal.value = true;
 const closeModal = ()=>showModal.value = false;
@@ -23,26 +22,34 @@ const toggleIsRecording = (state:boolean)=> isRecording.value = state;
 const toggleIsInitiateRecording = (state:boolean)=>isInitiateRecording.value = state;
 var mediaRecorder = null,
   audio = null,
-  mixedStream = null,
-  stream = null,
   recorder = null;
 const recordedChunks = [];
-var videoElement = null , canvasElement = null, canvasContext = null,videoInfo = {
+var videoElement = null, selectedDevices = null , canvasElement = null, canvasContext = null,videoInfo = {
   name: "",
   dateCreated: "",
   thumbnailDataUrl: "",
-  description:""
+  description:"",
+  mimeType:""
 };
 
-const records = ref([]);
-
-const handleStartRecording = async (selectedDevices) => {
+const setupStream = async (selectedDevices) => {
   try {
     toggleIsInitiateRecording(true);
-    stream = await navigator.mediaDevices.getDisplayMedia({
-      video: selectedDevices.screen,
-      audio: selectedDevices.microphone,
-    });
+const stream =(selectedDevices?.screen && selectedDevices?.camera)? 
+      await navigator.mediaDevices.getDisplayMedia({
+        video: true,  // Screen recording
+        audio: selectedDevices?.microphone,
+      })// Both video camera and screen recording
+      :(selectedDevices?.camera) 
+      ? await navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: selectedDevices?.microphone,
+      })// Only video camera recording
+      : await navigator.mediaDevices.getUserMedia({
+        audio: selectedDevices?.microphone,
+      });// Audio-only recording
+    
+
     audio = await navigator.mediaDevices.getUserMedia({
       audio: {
         echoCancellation: true,
@@ -51,14 +58,15 @@ const handleStartRecording = async (selectedDevices) => {
       },
     });
 
-    setupVideoFeedback();
+    setupVideoFeedback(stream);
+    return {stream,audio};
   } catch (error) {
     console.error("Error starting recording:", error);
     toggleIsInitiateRecording(false);
   }
-};
+}
 
-const setupVideoFeedback = () => {
+const setupVideoFeedback = (streamn) => {
   if (stream) {
     const livePreview = document.querySelector(".live__preview");
     videoElement = document.createElement("video");
@@ -68,14 +76,18 @@ const setupVideoFeedback = () => {
     videoElement.play();
   } else {
     console.warn("Stream session", "No stream available");
+ toggleIsRecording(false);
+  toggleIsInitiateRecording(false);
   }
 };
 
-const startRecording = async () => {
-  await setupStream();
+const startRecording = async (SelectedDevices) => {
+  
+    selectedDevices = SelectedDevices;
+ const {stream,audio} = await setupStream(SelectedDevices);
    toggleIsRecording(true);
   if (stream && audio) {
-    mixedStream = new MediaStream([...stream.getTracks(), ...audio.getTracks()]);
+    const mixedStream = new MediaStream([...stream.getTracks(), ...audio.getTracks()]);
     recorder = new MediaRecorder(mixedStream);
     recorder.ondataavailable = handleDataAvailable;
     recorder.onstop = handleStop;
@@ -87,12 +99,13 @@ const startRecording = async () => {
    
   } else {
     console.warn("Stream session", "No stream available");
+    toggleIsRecording(false);
+    toggleIsInitiateRecording(false);
   }
 };
 
-const handleDataAvailable = (e) => {
-  recordedChunks.push(e.data);
-};
+const handleDataAvailable = (e) => recordedChunks.push(e.data);
+
 
 const stopRecording = () => {
   recorder.stop();
@@ -101,15 +114,23 @@ const stopRecording = () => {
 };
 
 const handleStop = (e) => {
+  const mimeType = (selectedDevices?.screen && selectedDevices?.camera)
+  ? "video/webm" // Screen recording with camera
+  :(selectedDevices?.camera)
+  ?  "video/mp4" // Camera recording
+  : "audio/webm"; // Audio-only recording
+  
   const blob = new Blob(recordedChunks, {
-    type: "video/mp4",
+    type: mimeType,
   });
 
   const url = URL.createObjectURL(blob);
   videoInfo.thumbnailDataUrl = generateThumbnail(url);
-showSaveModal.value = true;
-  saveToLocalStorage(blob);
-  showModal.value = true;
+  videoInfo.mimeType = mimeType;
+  console.log(videoInfo)
+  showSaveModal.value = true;
+  storeToLocalStorage(blob);
+  // showModal.value = true;
 };
 
 const generateThumbnail = (videoUrl) => {
@@ -128,7 +149,7 @@ const generateThumbnail = (videoUrl) => {
   return videoInfo.thumbnailDataUrl;
 };
 
-const saveToLocalStorage = (videoBlob) => {
+const storeToLocalStorage = (videoBlob) => {
   const name = videoInfo.name || "untitled";
   const fileName = `${name}_${Date.now()}.webm`;
 
@@ -162,14 +183,14 @@ onMounted(() => {
   
 });
 
-const getSubmitData = (data:{name:string,description: string})=> videoInfo.value = {…videoInfo,data};
+const getSubmitData = (data:{name:string,description: string})=> videoInfo.value = {...videoInfo,data};
 
 </script>
 
 <template>
   <div className="page">
       <div className="page__content">
-  <div v-if="!isRecording">
+  <div v-if="!isInitiateRecording">
         <BreadcrumComponent :breadcrum="breadcrum"/>
         <div class="heading">
           <h2>My Recordings 45</h2>
@@ -181,7 +202,7 @@ const getSubmitData = (data:{name:string,description: string})=> videoInfo.value
                 <button type="button" class="start-recording" @click="triggerRecording"><IoIosRecording/> Start Recording</button>
           </div>
         </div>
-        <RecordingModalComponent v-if="showModal" :isRecording="isRecording" :toggleIsRecording="toggleIsRecording" :closeModal="closeModal" :showModal="showModal" :handleStartRecording="handleStartRecording" />
+        <RecordingModalComponent v-if="!isInitiateRecording" :isRecording="isRecording" :toggleIsRecording="toggleIsRecording" :closeModal="closeModal" :showModal="showModal" :handleStartRecording="startRecording" />
         <SaveRecordComponent v-if="showSaveModal" :isRecording="isRecording" :showModal="showSaveModal" :toggleIsRecording="toggleIsRecording" :closeModal="closeSaveModal" :handleStartRecording="handleStartRecording" :getSubmitData="getSubmitData" />
         <div class="table_responsive"><table className="table__bordered table__stripped table__hover table__scrollable">
           <thead>
@@ -195,6 +216,7 @@ const getSubmitData = (data:{name:string,description: string})=> videoInfo.value
             <th></th>
           </thead>
           <tbody>
+
             <tr v-for="record in records" :key="record.fileName">
               <td>
                
@@ -207,37 +229,25 @@ const getSubmitData = (data:{name:string,description: string})=> videoInfo.value
                 </div></td>
               <td>56.2k</td>
               <td>{{ record.dateCreated }}</td>
-              <td><GoKebabHorizontal/></td>
+              <td><GoKebabHorizontal/><button @click="downloadRecording(record.fileName)">Download</button></td>
             </tr>
+            
           </tbody>
-        </table></div> 
+        </table>
+        <div  v-if="!records.value" class="no-data"><h3>No Records Available</h3></div></div> 
   </div>
-       <div v-if="isRecording">
+       <div v-if="isInitiateRecording">
         <div class="live">
           <div class="live__stream">
           <CgMediaLive size="1rem" color="red" />  Live preview
           </div>
           <div class="live__preview">
           </div>
-          <button @click="[isRecording? stopRecording : startRecording]" :disabled="!isRecording">{{isRecording? "Stop Recording" : "Start Recording"}}</button>
-          <div class="shimmering-bar"></div>
+         <button type="button" @click="() => (isRecording.value ? stopRecording() : startRecording())">
+  {{ isRecording ? "Stop Recording" : "Start Recording" }}
+</button>
 
-    <video ref="videoElement" controls></video>
-    <canvas ref="thumbnailCanvas" style="display: none;"></canvas>
-
-      <!-- <tr">
-              <td>{{ record.name }}</td>
-              <td></td>
-              <td>
-              </td>
-              <td>
-                <button @click="downloadRecording(record.fileName)">Download</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <button @click="sortAndCloseModal">Sort by Date</button>
-        <button @click="showModal = false">Close</button> -->
+          <canvas ref="thumbnailCanvas" style="display: none;"></canvas>
   </div>
   </div>
       </div>
@@ -249,7 +259,13 @@ const getSubmitData = (data:{name:string,description: string})=> videoInfo.value
 
 <style lang="less" scoped>
 @import (reference) "../assets/styles/components/button";
-
+.no-data{
+  display:grid;
+  place-items:center;
+  width:100%;
+  height:350px;
+  color:var(--color-info-dark)
+}
      .page {
       padding:1.5rem;
       width:100%;
@@ -286,10 +302,7 @@ const getSubmitData = (data:{name:string,description: string})=> videoInfo.value
         margin-bottom:0.875rem;
         margin-bottom:1rem;
 
-        @media screen and (max-width:47.988rem){
-          display:block;
-
-        }
+      
         @media screen and (max-width:47.988rem){
           display:block;
 
@@ -311,7 +324,11 @@ const getSubmitData = (data:{name:string,description: string})=> videoInfo.value
         border-radius:16px;
         padding: 0.25rem * 1.5  0.25rem * 3;
         margin-bottom:.5rem;
+       @media screen and (max-width:47.988rem){  
+        font-size: 0.67rem;
+        padding: 0.15rem * 2 0.15rem * 4;
 
+        }
 
       }
       .new-request{
@@ -320,7 +337,13 @@ const getSubmitData = (data:{name:string,description: string})=> videoInfo.value
       .start-recording{
         .btn(#4285f4)
       }
-  
+    @media screen and (max-width:61.988rem){
+          display:flex;
+          justify-content:flex-end;
+          align-items:center;
+          gap:4px;
+
+        }
        @media screen and (max-width:47.988rem){
           flex-wrap:wrap;
           gap:2px;
@@ -365,7 +388,7 @@ const getSubmitData = (data:{name:string,description: string})=> videoInfo.value
           width:90%;
           content:"";
           position: relative;
-          height: clamp(40vh, 60vh ,80vh);
+          min-height: clamp(30vh, 40vh ,50vh);
           margin-bottom:1.5rem;
           overflow: hidden;
           background: linear-gradient(90deg, #023a5ee8, #023a5e, #023a5ee8);

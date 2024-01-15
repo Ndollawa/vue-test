@@ -23,12 +23,12 @@
         font-size:.675rem;
         gap:10px;
 
-        &:not(:last-child):after{
+        &:not(:last-child)::after{
             content:">";
             line-height:1.2;
 
         }
-        &:is(:last-child){
+        &:last-child{
             color:#178af9;
         }
     }

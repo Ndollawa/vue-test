@@ -3,7 +3,7 @@ import {reactive} from "vue";
 import { TiTimes } from "vue3-icons/ti";
 import { BsToggleOn ,BsToggleOff} from "vue3-icons/bs";
 
-const {title} = defineProps(["title"])
+const {title,closeModal,showModal} = defineProps(["title","closeModal","showModal"])
 
 
 
@@ -11,7 +11,7 @@ const {title} = defineProps(["title"])
 
 
 <template>
-  <div class="overlay">
+  <div v-if="showModal" class="overlay">
   <div class="modal">
   
     <div class="modal__content">  
