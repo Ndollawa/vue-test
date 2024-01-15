@@ -1,39 +1,35 @@
 <script setup lang="ts">
 import {reactive} from "vue";
-import { IoToggle,IoToggleOutline } from "vue3-icons/io5";
+import { TiTimes } from "vue3-icons/ti";
+import { BsToggleOn ,BsToggleOff} from "vue3-icons/bs";
+
+const {isRecording,closeModal, toggleIsRecording , handleStartRecording} = defineProps(["isRecording","closeModal", "toggleIsRecording" , "handleStartRecording"])
+// const isRecording = ref(false);
+const selectedDevices = reactive({
+  screen: false,
+  camera: false,
+  microphone: false,
+});
 
 
-const  selectedDevices = reactive({
-        screen: false,
-        camera: false,
-        microphone: false,
-      })
-  console.log(selectedDevices)
- 
-   const requestPermission = async()=> {
-      try {
-        // Logic to request permission for selected devices
-        console.log(selectedDevices)
-        await navigator.mediaDevices.getUserMedia(selectedDevices);
-        // Save selected devices to local storage
-        localStorage.setItem("selectedDevices", JSON.stringify(selectedDevices));
-        // Emit an event to start recording in the parent component
-        $emit("startRecording", selectedDevices);
-      } catch (error) {
-        console.error("Permission denied:", error);
-        // Handle permission denied scenario (show an error message, etc.)
-      }
-    }
+
 </script>
 
 
 <template>
   <div class="overlay">
   <div class="modal">
-    <div class="modal-content">
-      <h2>Select Recording Options</h2>
+  
+    <div class="modal__content">  
+    <div class="modal__content--heading">
+    <h3>New Recording</h3>
+<TiTimes @click="closeModal" size="1rem" />
+  </div>
+
       <div>
+      <h4>Select Recording Options</h4>
         <select >
+          <label>Save the recording in</label>
           <option>Select Project</option>
           <option>Hmmm</option>
         </select>
@@ -42,21 +38,21 @@ const  selectedDevices = reactive({
       <label for="screen">
         <input type="checkbox" id="screen" v-model="selectedDevices.screen" />
         Screen
-      </label><span @click="selectedDevices.screen = ! selectedDevices.screen"><IoToggle v-if="selectedDevices.screen" color="green"/> <IoToggleOutline v-if="!selectedDevices.screen"/></span>
+      </label><span @click="selectedDevices.screen = ! selectedDevices.screen"><BsToggleOn  v-if="selectedDevices.screen" color="green"/> <BsToggleOff v-if="!selectedDevices.screen" color="#ccc"/></span>
     </div>
     <div class="media-option">
       <label for="camera">
         <input type="checkbox" id="camera" v-model="selectedDevices.camera" />
         Camera
-      </label><span @click="selectedDevices.camera = ! selectedDevices.camera"> <IoToggle v-if="selectedDevices.camera" color="green"/> <IoToggleOutline v-if="!selectedDevices.camera"/></span>
+      </label><span @click="selectedDevices.camera = ! selectedDevices.camera"> <BsToggleOn  v-if="selectedDevices.camera" color="green"/> <BsToggleOff v-if="!selectedDevices.camera" color="#ccc"/></span>
     </div>
     <div class="media-option">
       <label for="mic">
         <input type="checkbox" id="mic" v-model="selectedDevices.microphone" />
         Microphone
-      </label> <span @click="selectedDevices.microphone = ! selectedDevices.microphone"> <IoToggle v-if="selectedDevices.microphone" color="green"/> <IoToggleOutline v-if="!selectedDevices.microphone"/></span>
+      </label> <span @click="selectedDevices.microphone = ! selectedDevices.microphone"> <BsToggleOn  v-if="selectedDevices.microphone" color="green"/> <BsToggleOff v-if="!selectedDevices.microphone" color="#ccc"/></span>
     </div>
-      <button @click="requestPermission">Start Recording</button>
+      <button @click="handleStartRecording(selectedDevices)">Start Recording</button>
     </div>
   </div>
 </div>
@@ -71,6 +67,7 @@ const  selectedDevices = reactive({
   background-color:rgba(0,0,0,0,0.77);
   z-index:90;
   display:flex;
+  overflow:hidden;
   align-items:center;
   justify-content:center;
 }
@@ -80,17 +77,43 @@ const  selectedDevices = reactive({
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.75);
   display: flex;
+  flex-direction:column;
   justify-content: center;
   align-items: center;
-  
-  &-content {
-  background: white;
+
+
+  &__content {
+  background: var(--color-white);
   padding: 20px;
   border-radius: 8px;
   text-align: center;
+  width:350px;
+  user-select:none;
 
+  &--heading{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    border-bottom:1px solid #c3c3c3;
+    margin-bottom:1rem;
+    padding:6px 12px;
+
+    svg{
+      cursor:pointer;
+      font-weight:400;
+    }
+
+  }
+ select{
+  height:2.4rem;
+  width:100%;
+  background:var(--color-white);
+  border-radius:.24rem;
+  font-size:0.765rem;
+  margin:0.875rem 0;
+ }
   .media-option{
     // margin-bottom:0.175rem;
     padding:0.4rem .8rem;
@@ -109,11 +132,16 @@ const  selectedDevices = reactive({
    span svg{
       font-size:1.5rem;
       cursor:pointer;
+      // color:var(--color-dark);
+
+      // &:checked{
+      //   color: green;
+      // }
     }
   }
 }
 button {
-  .btn(#748849);
+  .btn(#4285f4);
 }
 }
 

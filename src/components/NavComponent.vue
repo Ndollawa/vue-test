@@ -1,48 +1,65 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref ,watch} from 'vue';
+import { RiArrowDownSLine } from "vue3-icons/ri";
 import {links} from "../utils/routes";
 
 
-const showMenu = defineProps(["toggleMenu"]);
+const {toggleMenu} = defineProps(["toggleMenu"]);
+
 </script>
 
 <template>
-    <div class="nav">
-        <ul class="nav__links">
-            <li v-for="link in links" :key="link.id" :class="{'has-submenu':link?.children,'nav__links--items':true}">
-                <router-link active-class="active" :to="link.path">{{link.name}}</router-link>
+    <div :class="{show:toggleMenu,'nav__menu':true}">
+        <ul class="nav__menu--items">
+            <li v-for="link in links" :key="link.id" :class="{'has-submenu':link?.children,'nav__menu--items__links':true}">
+                <router-link active-class="active" :to="link.path"><div>{{link.name}}</div>
+<RiArrowDownSLine v-if="link?.children" /></router-link>
             </li>
         </ul>
     </div>
 </template>
 
 <style lang="less" scoped>
-.nav{
+
+.nav__menu{
     width:100%;
+    overflow:none;
+   
+
     
-    &__links{
+    @media screen and (max-width:47.988rem) {
+      display: none;
+    }
+
+    &--items{
         display:flex;
         align-items:center;
         justify-content:space-between;
         color:var(--color-dark);
 
-        &--items{
+        &__links{
             list-style: none;
             margin: 0 0.16rem;
             padding-top:3px;
-              &.has-submenu::after{
-                    content:"v";
-                    display:inline-flex;
+              &.has-submenu{
+                    display:flex;
                     font-size:12px;
                     margin-left:4px;
                     align-items:center;
-                    justify-content:center;
-                  
+                    justify-content:space-between;
+
+                  @media screen and (max-width:47.988rem){
+                    width:100%;
+
+                  }
                 }
 
             a {
             color: var(--color-info-dark);
-            font-size: 0.8rem;
+            display:inline-flex;
+            align-items:center;
+            justify-content:space-between;
+            font-size: 0.765rem;
             text-decoration: none;
             text-transform: capitalize;
             text-transform: capitalize;
@@ -53,7 +70,7 @@ const showMenu = defineProps(["toggleMenu"]);
             color: var(--color-info-dark);
             transition: 0.3s;
                 a{
-                    font-weight:600;
+                    font-weight:500;
                 }
                 }
               
@@ -61,53 +78,53 @@ const showMenu = defineProps(["toggleMenu"]);
      
     }
     @media screen and (max-width:47.988rem){
-    &.show {
-                display: block;
-                position: absolute;
-                background-color: var(--color-background);
-                padding: 0;
-                width: 15rem;
-                top: 5rem;
-                right: 1rem;
-                border-radius: 1.2rem;
-                align-items: center;
-                user-select: none;
+     &.show {
+        display: block;
+        position: absolute;
+        background-color: var(--color-background);
+        padding: 0;
+        width: 15rem;
+        top: 4rem;
+        right: 1rem;
+        border-radius: 1.2rem;
+        align-items: center;
+        user-select: none;
+        transition:.3s ease-in-out;
+      }
+ &--items {
+        display: block;
+        width:100%;
+        background-color:var(--color-background);
+        
+        li {
+          margin: 0;
+          padding: 15px 25px;
+          height: 3rem;
+          color: var(--color-white);
+          display: flex;
+          align-items: center;
+          text-transform: capitalize;
 
+          &:hover {
+            background-color: var(--color-background);
 
+            a {
+              color: var(--color-dark);
             }
+          }
 
-            &__links{
-                li {
-                    margin: 0;
-                    padding: 15px 25px;
-                    height: 3rem;
-                    color: var(--color-white);
-                    display: flex;
-                    align-items: center;
-                    text-transform: capitalize;
+          &:first-child:hover {
+            border-top-left-radius: 1.2rem;
+            border-top-right-radius: 1.2rem;
+          }
 
-                    &:hover {
-                        background-color: var(--color-background);
-
-                        a {
-
-                            color: var(--color-dark);
-                        }
-                    }
-
-                    &:first-child:hover {
-                        border-top-left-radius: 1.2rem;
-                        border-top-right-radius: 1.2rem;
-                    }
-
-                    //    &:last-child:hover{
-                    //     border-bottom-left-radius: 1.2rem;
-                    //     border-bottom-right-radius: 1.2rem;
-                    //    }
-                }
-            }
+     
         }
-    }}}
+      }
+           
+        }
+    
 }
+
 
 </style>

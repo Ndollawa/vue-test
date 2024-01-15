@@ -4,12 +4,11 @@ import {ref} from "vue"
 import {TopNavComponent,SideBarComponent} from './components'
 const toggleMenu = ref(false)
 const toggleDarkTheme = ref(false)
-const handleToggleMenu = ()=> {
+const handleToggleMenu = () => {
   toggleMenu.value = !toggleMenu.value;
 }
 const handleToggleTheme = (state:boolean)=>{
   toggleDarkTheme.value = state;
-  // alert(toggleDarkTheme.value)
 } 
 </script>
 
@@ -17,7 +16,7 @@ const handleToggleTheme = (state:boolean)=>{
   <div :class="{app__dashboard:true, dark:toggleDarkTheme}">
       <nav class="app__dashboard--nav">
         <div class="logo">Adilo</div>
-        <TopNavComponent :handleToggleMenu="handleToggleMenu" :handleToggleTheme="handleToggleTheme" :toggleDarkTheme="toggleDarkTheme" />
+        <TopNavComponent :toggleMenu="toggleMenu" :handleToggleMenu="handleToggleMenu" :handleToggleTheme="handleToggleTheme" :toggleDarkTheme="toggleDarkTheme" />
       </nav>
       <SideBarComponent />
       <main class="main">
@@ -51,12 +50,15 @@ const handleToggleTheme = (state:boolean)=>{
 
  
   @media screen and (max-width:61.988rem){
-    grid-template-columns: 7rem auto 23rem;
-    width: 94%;
+      
+    width: 100%;
   }
 
   @media screen and (max-width:47.988rem){
-    grid-template-columns: auto 18rem;
+     grid-template-areas:
+      "nav nav nav nav nav nav nav nav nav nav nav nav"
+      "main main main main main main main main main main main main";
+
     width: 100%;
   }
 
@@ -65,14 +67,15 @@ const handleToggleTheme = (state:boolean)=>{
     grid-area:main;
     padding-right: 1.5rem;
     min-height: 100vh;
+    overflow:auto;
 
     &__content {
  
     }
 
     @media screen and (max-width:47.988rem) {
-      margin-top: 8rem;
-      padding: 0 1rem;
+      padding: 0 .5rem;
+      margin-top:0;
     }
   }
 
@@ -92,12 +95,12 @@ const handleToggleTheme = (state:boolean)=>{
 
     @media screen and (max-width:47.988rem) {
       margin: 0 auto 4rem;
-      width: 94%;
+      width: 100%;
     }
   }
 
   @media screen and (max-width:35.988rem){
-    margin-top: 8rem;
+    // margin-top: 4rem;
     padding: 0 1rem;
   }
 }

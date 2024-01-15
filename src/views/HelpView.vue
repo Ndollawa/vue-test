@@ -18,6 +18,7 @@ const pageBreadcrum =['Snapbyte','Help'];
 <style lang="less" scoped>
  .page {
       padding:1.5rem;
+      width:100%;
 
       &__content{
         

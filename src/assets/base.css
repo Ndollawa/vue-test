@@ -18,12 +18,12 @@ html {
   padding: 0;
   box-sizing: border-box;
   scroll-behavior: smooth;
+ 
 }
 body {
   font-family: "Poppins", "sans-serif", "Helvetica";
   width: 100%;
   height: 100%;
-  overflow: auto;
 }
 h1,
 h2,
@@ -68,3 +68,6 @@ img {
   width: 100%;
 }
 
+main *,.main__content.page,.page__content,.overlay *{
+  overflow:auto
+}

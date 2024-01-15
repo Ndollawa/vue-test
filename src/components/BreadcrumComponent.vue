@@ -5,7 +5,7 @@
 <template>
     <div class="breadcrum">
         <ul class="breadcrum__list">
-            <li v-for="item in breadcrum.value" :key="item">{{item}}</li>
+            <li v-for="item in breadcrum" :key="item">{{item}}</li>
            
         </ul>
     </div>
@@ -23,12 +23,12 @@
         font-size:.675rem;
         gap:10px;
 
-        &:not(last-child):after{
+        &:not(:last-child):after{
             content:">";
             line-height:1.2;
 
         }
-        &:is(last-child){
+        &:is(:last-child){
             color:#178af9;
         }
     }

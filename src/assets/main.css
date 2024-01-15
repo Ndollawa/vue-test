@@ -140,12 +140,6 @@
 main {
   width: 100%;
 }
-.profile__photo {
-  width: 2.8rem;
-  height: 2.8rem;
-  border-radius: 50%;
-  overflow: hidden;
-}
 
 .text__muted {
   color: var(--color-info-dark);

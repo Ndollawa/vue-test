@@ -4,14 +4,14 @@ import {BsMoonStarsFill,BsSunFill  } from 'vue3-icons/bs'
 import NavComponent from "./NavComponent.vue"
 import userImage from "../assets/images/users/pic1.jpg";
 
-const {handleToggleTheme,handleToggleMenu,toggleDarkTheme} = defineProps(["handleToggleTheme","handleToggleMenu","toggleDarkTheme"])
+const {handleToggleTheme,handleToggleMenu,toggleDarkTheme,toggleMenu} = defineProps(["handleToggleTheme","handleToggleMenu","toggleDarkTheme","toggleMenu"])
 
 </script>
 
 <template>
       <div class="top mb-5">
           <div class="top__nav">
-           <NavComponent/>
+           <NavComponent :toggleMenu="toggleMenu"/>
           </div>
           <div class="top__line">|</div>
           <div class="mobile__menu" id="menu-btn">
@@ -50,7 +50,7 @@ const {handleToggleTheme,handleToggleMenu,toggleDarkTheme} = defineProps(["handl
                 alt="profile avatar"
               />
             </div>
-            <div class="info">
+            <div class="profile__info">
               <p>
                 Hey <strong>Ndubuisi</strong>
               </p>
@@ -58,6 +58,7 @@ const {handleToggleTheme,handleToggleMenu,toggleDarkTheme} = defineProps(["handl
             </div>
           </div>
         </div>
+
 </template>
 
 <style lang="less" scoped>
@@ -65,18 +66,26 @@ const {handleToggleTheme,handleToggleMenu,toggleDarkTheme} = defineProps(["handl
       display: flex;
       justify-content: flex-end;
       align-items:center;
-      flex-grow:1;
-
       gap: 2rem;
+       @media screen and (min-width:47.988rem) {
+            gap:.2rem;
+          }
 
       &__line{
         content:"|";
         font-weight: 600;
         color: #c3c3c3;
+         @media screen and (max-width:47.988rem) {
+            display:none;
+          }
       }
 
       &__nav{
         width:(100%/12)*6;
+        @media screen and (min-width:47.988rem) {
+            gap:.2rem;
+      flex-grow:1;
+          }
       }
       .mobile__menu {
         display: none;
@@ -143,8 +152,23 @@ const {handleToggleTheme,handleToggleMenu,toggleDarkTheme} = defineProps(["handl
         display: flex;
         gap: 2rem;
         text-align: right;
+         @media screen and (max-width:61.988rem) {
+            gap:.2rem;
+          }
+        &__photo {
+        width: 2rem;
+        height: 2rem;
+        border-radius: 8px;
+        overflow: hidden;
+          }
 
-        .info {
+       &__info {
+        display: grid;
+        justify-content:start;
+        small{
+          justify-self:flex-start;
+        }
+
           @media screen and (max-width:47.988rem) {
             display: none;
           }
@@ -152,7 +176,7 @@ const {handleToggleTheme,handleToggleMenu,toggleDarkTheme} = defineProps(["handl
       }
 
       @media screen and (max-width:47.988rem) {
-        position: fixed;
+       &{ position: fixed;
         top: 0;
         left: 0;
         align-items: center;
@@ -164,6 +188,6 @@ const {handleToggleTheme,handleToggleMenu,toggleDarkTheme} = defineProps(["handl
         z-index: 2;
         box-shadow: 0 1rem 1rem var(--color-light);
         width: 100%;
-      }
+      }}
     }
 </style>
