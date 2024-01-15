@@ -7,44 +7,31 @@ import { TbArrowsSort } from "vue3-icons/tb";
 import { BsFilterLeft } from "vue3-icons/bs";
 import { CgMediaLive } from "vue3-icons/cg";
 import {RecordingModalComponent,SaveRecordComponent, BreadcrumComponent} from "../components";
+import {saveToLocalStorage,getFromLocalStorage} from "../utils/helpers";
 
 const breadcrum = ref(['Snapbyte','My Recordings']);
     const showModal = ref(false), showSaveModal = ref(false),isInitiateRecording = ref(false), isRecording = ref(false);
   const triggerRecording = ()=> {
     openModal()
     }
-
-const openModal = ()=>{
-  showModal.value = true
-}
-const closeModal = ()=>{
-  showModal.value = false
-}
-const openSaveModal = ()=>{
-  showModal.value = true
-}
-const closeSaveModal = ()=>{
-  showModal.value = false
-}
-const toggleIsRecording = (state:boolean)=>{
-  isRecording.value = state
-}
-const toggleIsInitiateRecording = (state:boolean)=>{
-  isInitiateRecording.value = state
-}
+const key =ref("allRecords");
+const openModal = ()=>showModal.value = true;
+const closeModal = ()=>showModal.value = false;
+const openSaveModal = ()=>showModal.value = true;
+const closeSaveModal = ()=>showModal.value = false;
+const toggleIsRecording = (state:boolean)=> isRecording.value = state;
+const toggleIsInitiateRecording = (state:boolean)=>isInitiateRecording.value = state;
 var mediaRecorder = null,
   audio = null,
   mixedStream = null,
   stream = null,
   recorder = null;
 const recordedChunks = [];
-var videoElement = null;
-var canvasElement = null;
-var canvasContext = null;
-var videoInfo = {
+var videoElement = null , canvasElement = null, canvasContext = null,videoInfo = {
   name: "",
   dateCreated: "",
   thumbnailDataUrl: "",
+  description:""
 };
 
 const records = ref([]);
@@ -120,7 +107,7 @@ const handleStop = (e) => {
 
   const url = URL.createObjectURL(blob);
   videoInfo.thumbnailDataUrl = generateThumbnail(url);
-showFileModal.value = true;
+showSaveModal.value = true;
   saveToLocalStorage(blob);
   showModal.value = true;
 };
@@ -146,14 +133,13 @@ const saveToLocalStorage = (videoBlob) => {
   const fileName = `${name}_${Date.now()}.webm`;
 
   const recordData = {
-    name: videoInfo.name,
+    ...videoInfo,
     dateCreated: new Date().toLocaleString(),
-    thumbnailDataUrl: videoInfo.thumbnailDataUrl,
     fileName,
   };
 console.log(recordData)
   records.value.push(recordData);
-  localStorage.setItem(fileName, JSON.stringify(recordData));
+  saveToLocalStorage(key, recordData);
 
   const blobUrl = URL.createObjectURL(videoBlob);
   const link = document.createElement("a");
@@ -168,15 +154,15 @@ const sortByDate = () => {
 };
 
 onMounted(() => {
-  // Load records from local storage on component mount
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    const recordData = JSON.parse(localStorage.getItem(key));
+
+    const recordData = getFromLocalStorage(key);
     if (recordData) {
-      records.value.push(recordData);
+      records.value = recordData;
     }
-  }
+  
 });
+
+const getSubmitData = (data:{name:string,description: string})=> videoInfo.value = {…videoInfo,data};
 
 </script>
 
@@ -188,15 +174,15 @@ onMounted(() => {
         <div class="heading">
           <h2>My Recordings 45</h2>
           <div class="action-tool">
-                <span class="sort"><TbArrowsSort /> By Date</span>
+                <span @click="sortAndCloseModal" class="sort"><TbArrowsSort /> By Date</span>
 
                 <span class="sort"><BsFilterLeft /> Add Filter</span>
                 <button type="button" class="new-request"><SlCamrecorder/> New Request</button>
                 <button type="button" class="start-recording" @click="triggerRecording"><IoIosRecording/> Start Recording</button>
           </div>
         </div>
-        <RecordingModalComponent v-if="showModal" :isRecording="isRecording" :toggleIsRecording="toggleIsRecording" :closeModal="closeModal" :handleStartRecording="handleStartRecording" />
-        <SaveRecordComponent v-if="showSaveModal" :isRecording="isRecording" :toggleIsRecording="toggleIsRecording" :closeModal="closeSvaeModal" :handleStartRecording="handleStartRecording" />
+        <RecordingModalComponent v-if="showModal" :isRecording="isRecording" :toggleIsRecording="toggleIsRecording" :closeModal="closeModal" :showModal="showModal" :handleStartRecording="handleStartRecording" />
+        <SaveRecordComponent v-if="showSaveModal" :isRecording="isRecording" :showModal="showSaveModal" :toggleIsRecording="toggleIsRecording" :closeModal="closeSaveModal" :handleStartRecording="handleStartRecording" :getSubmitData="getSubmitData" />
         <div class="table_responsive"><table className="table__bordered table__stripped table__hover table__scrollable">
           <thead>
             <th>
@@ -209,17 +195,18 @@ onMounted(() => {
             <th></th>
           </thead>
           <tbody>
-            <tr>
+            <tr v-for="record in records" :key="record.fileName">
               <td>
-               <video src="" controls></video>
+               
+                <img :src="record.thumbnailDataUrl" alt="Thumbnail" style="max-width: 50px; max-height: 50px;">
               </td>
               <td>
                   <div>
-                    <h4> My Journey to Timbaktu</h4>
-                    <p>Here are some dummy texts to add to my projects.</p>
+                    <h4>{{record.name}}u</h4>
+                    <p>{{record.description}}</p>
                 </div></td>
               <td>56.2k</td>
-              <td>153Mb</td>
+              <td>{{ record.dateCreated }}</td>
               <td><GoKebabHorizontal/></td>
             </tr>
           </tbody>
@@ -238,11 +225,10 @@ onMounted(() => {
     <video ref="videoElement" controls></video>
     <canvas ref="thumbnailCanvas" style="display: none;"></canvas>
 
-      <!-- <tr v-for="record in records" :key="record.fileName">
+      <!-- <tr">
               <td>{{ record.name }}</td>
-              <td>{{ record.dateCreated }}</td>
+              <td></td>
               <td>
-                <img :src="record.thumbnailDataUrl" alt="Thumbnail" style="max-width: 50px; max-height: 50px;">
               </td>
               <td>
                 <button @click="downloadRecording(record.fileName)">Download</button>

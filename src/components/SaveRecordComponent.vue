@@ -4,17 +4,15 @@ import { IoToggle,IoToggleOutline } from "vue3-icons/io5";
 import ModalComponent from "./ModalComponent.vue";
 
 const name = ref(""),description = ref("");
-
-   const submitForm = async()=> {
+const {getSubmitData}= defineProps([" getSubmitData"])
    
-    }
 </script>
 
 
 <template>
  <ModalComponent :title="'Save Recording'" :showModal="showModal" :closeModal="closeModal" >
    <h2>Recording Modal</h2>
-      <form @submit.prevent="submitForm">
+      <form @submit.prevent="getSubmitData({name,description})">
         <label for="name">Name:</label>
         <input v-model="name" type="text" id="name" required />
 
