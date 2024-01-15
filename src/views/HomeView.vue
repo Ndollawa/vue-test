@@ -6,10 +6,10 @@ import { SlCamrecorder } from "vue3-icons/sl";
 import { TbArrowsSort } from "vue3-icons/tb";
 import { BsFilterLeft } from "vue3-icons/bs";
 import { CgMediaLive } from "vue3-icons/cg";
-import {ModalComponent as RecordingModal, BreadcrumComponent} from "../components";
+import {RecordingModalComponent,SaveRecordComponent, BreadcrumComponent} from "../components";
 
 const breadcrum = ref(['Snapbyte','My Recordings']);
-    const showModal = ref(false), showFileModal = ref(false), isRecording = ref(false);
+    const showModal = ref(false), showSaveModal = ref(false),isInitiateRecording = ref(false), isRecording = ref(false);
   const triggerRecording = ()=> {
     openModal()
     }
@@ -20,8 +20,17 @@ const openModal = ()=>{
 const closeModal = ()=>{
   showModal.value = false
 }
+const openSaveModal = ()=>{
+  showModal.value = true
+}
+const closeSaveModal = ()=>{
+  showModal.value = false
+}
 const toggleIsRecording = (state:boolean)=>{
   isRecording.value = state
+}
+const toggleIsInitiateRecording = (state:boolean)=>{
+  isInitiateRecording.value = state
 }
 var mediaRecorder = null,
   audio = null,
@@ -42,7 +51,7 @@ const records = ref([]);
 
 const handleStartRecording = async (selectedDevices) => {
   try {
-    toggleIsRecording(true);
+    toggleIsInitiateRecording(true);
     stream = await navigator.mediaDevices.getDisplayMedia({
       video: selectedDevices.screen,
       audio: selectedDevices.microphone,
@@ -58,7 +67,7 @@ const handleStartRecording = async (selectedDevices) => {
     setupVideoFeedback();
   } catch (error) {
     console.error("Error starting recording:", error);
-    toggleIsRecording(false);
+    toggleIsInitiateRecording(false);
   }
 };
 
@@ -77,6 +86,7 @@ const setupVideoFeedback = () => {
 
 const startRecording = async () => {
   await setupStream();
+   toggleIsRecording(true);
   if (stream && audio) {
     mixedStream = new MediaStream([...stream.getTracks(), ...audio.getTracks()]);
     recorder = new MediaRecorder(mixedStream);
@@ -87,7 +97,7 @@ const startRecording = async () => {
       console.log("Recording started");
 
     };
-    toggleIsRecording(true);
+   
   } else {
     console.warn("Stream session", "No stream available");
   }
@@ -100,6 +110,7 @@ const handleDataAvailable = (e) => {
 const stopRecording = () => {
   recorder.stop();
   toggleIsRecording(false);
+  toggleIsInitiateRecording(false);
 };
 
 const handleStop = (e) => {
@@ -111,7 +122,6 @@ const handleStop = (e) => {
   videoInfo.thumbnailDataUrl = generateThumbnail(url);
 showFileModal.value = true;
   saveToLocalStorage(blob);
-  toggleIsRecording(false);
   showModal.value = true;
 };
 
@@ -125,6 +135,7 @@ const generateThumbnail = (videoUrl) => {
     canvasElement.height = videoElement.videoHeight;
     canvasContext.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
     const thumbnailDataUrl = canvasElement.toDataURL("image/png");
+    console.log(thumbnailDataUrl)
     videoInfo.thumbnailDataUrl = thumbnailDataUrl;
   });
   return videoInfo.thumbnailDataUrl;
@@ -140,7 +151,7 @@ const saveToLocalStorage = (videoBlob) => {
     thumbnailDataUrl: videoInfo.thumbnailDataUrl,
     fileName,
   };
-
+console.log(recordData)
   records.value.push(recordData);
   localStorage.setItem(fileName, JSON.stringify(recordData));
 
@@ -184,7 +195,8 @@ onMounted(() => {
                 <button type="button" class="start-recording" @click="triggerRecording"><IoIosRecording/> Start Recording</button>
           </div>
         </div>
-        <RecordingModal v-if="showModal" :isRecording="isRecording" :toggleIsRecording="toggleIsRecording" :closeModal="closeModal" :handleStartRecording="handleStartRecording" />
+        <RecordingModalComponent v-if="showModal" :isRecording="isRecording" :toggleIsRecording="toggleIsRecording" :closeModal="closeModal" :handleStartRecording="handleStartRecording" />
+        <SaveRecordComponent v-if="showSaveModal" :isRecording="isRecording" :toggleIsRecording="toggleIsRecording" :closeModal="closeSvaeModal" :handleStartRecording="handleStartRecording" />
         <div class="table_responsive"><table className="table__bordered table__stripped table__hover table__scrollable">
           <thead>
             <th>
@@ -288,6 +300,10 @@ onMounted(() => {
         margin-bottom:0.875rem;
         margin-bottom:1rem;
 
+        @media screen and (max-width:47.988rem){
+          display:block;
+
+        }
         @media screen and (max-width:47.988rem){
           display:block;
 

@@ -18,7 +18,7 @@ const selectedDevices = reactive({
 
 
 <template>
- <ModalComponent :showModal="showModal" :closeModal="closeModal">
+ <ModalComponent :title="'New Recording'" :showModal="showModal" :closeModal="closeModal">
       <div>
       <h4>Select Recording Options</h4>
         <select >
@@ -46,7 +46,7 @@ const selectedDevices = reactive({
       </label> <span @click="selectedDevices.microphone = ! selectedDevices.microphone"> <BsToggleOn  v-if="selectedDevices.microphone" color="green"/> <BsToggleOff v-if="!selectedDevices.microphone" color="#ccc"/></span>
     </div>
       <button @click="handleStartRecording(selectedDevices)">Start Recording</button>
-    </div>
+    
   </ModalComponent>
 </template>
 
@@ -86,13 +86,8 @@ const selectedDevices = reactive({
       // }
     }
   }
-}
 button {
   .btn(#4285f4);
 }
-
-
-
-
 
 </style>

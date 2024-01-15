@@ -12,7 +12,7 @@ const name = ref(""),description = ref("");
 
 
 <template>
- <ModalComponent :showModal="showModal" :closeModal="closeModal" >
+ <ModalComponent :title="'Save Recording'" :showModal="showModal" :closeModal="closeModal" >
    <h2>Recording Modal</h2>
       <form @submit.prevent="submitForm">
         <label for="name">Name:</label>

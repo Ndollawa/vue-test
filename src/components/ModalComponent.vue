@@ -3,13 +3,7 @@ import {reactive} from "vue";
 import { TiTimes } from "vue3-icons/ti";
 import { BsToggleOn ,BsToggleOff} from "vue3-icons/bs";
 
-const {isRecording,closeModal,showModal, toggleIsRecording , handleStartRecording} = defineProps(["isRecording","closeModal","showModal"  "toggleIsRecording" , "handleStartRecording"])
-// const isRecording = ref(false);
-const selectedDevices = reactive({
-  screen: false,
-  camera: false,
-  microphone: false,
-});
+const {title} = defineProps(["title"])
 
 
 
@@ -22,7 +16,7 @@ const selectedDevices = reactive({
   
     <div class="modal__content">  
     <div class="modal__content--heading">
-    <h3>New Recording</h3>
+    <h3>{{title}}</h3>
     <TiTimes @click="closeModal" size="1rem" />
   </div>
   <slot></slot>
